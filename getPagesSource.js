@@ -22,3 +22,9 @@ chrome.runtime.sendMessage({
     action: "getSource",
     source: replaceContentInContainer('year', 'This is replaced')
 });
+
+/*
+TODO: Use these to target bob title and year
+document.getElementsByClassName('bob-title')[0].innerHTML
+document.getElementsByClassName('year')[1].innerHTML
+*/
