@@ -1,5 +1,3 @@
-
-
 function getObjTitle() {
     var textTitle;
     var title = document.getElementsByClassName('title');
@@ -9,7 +7,7 @@ function getObjTitle() {
     } else {
         textTitle = title.innerHTML;
     }
-    return textTitle.match(/([a-zA-Z](\s[a-zA-Z])?)*/)[0]; 
+    return textTitle.match(/([a-zA-Z](\s[a-zA-Z])?|-?)*/)[0]; 
 }
 
 function getObjYear() {
@@ -20,6 +18,7 @@ function getObjYear() {
 }
 
 function searchUrl(textTitle, textYear) {
+    textYear = textYear || "";
     var searchUrl = 'https://www.omdbapi.com/' + 
     '?t=' + textTitle + '&y=' + textYear + '&plot=short&r=json';
     return searchUrl;
@@ -31,51 +30,68 @@ function renderHTML() {
     var year = getObjYear();
     var search = searchUrl(title, year);
     
-    console.log(title);
 
     html += title;
     html += year;
     html += search;
 
-    getInfo(search, title, year, function(imdbRating, imdbID) {
-        console.log(imdbID);
-        var test = document.getElementsByClassName('year');
-        test = test[test.length - 1].innerHTML = imdbRating;
-    }, function(errorMessage) {
-      console.log(errorMessage);
-    });
+    getInfo();
 
     return html;    
 }
 
+function ajaxCall(search) {
+    var myPromise = new Promise(function(resolve, reject) {
+        fetch(search).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            if(data.imdbID !== undefined) {
+                resolve({id: data.imdbID, rating: data.imdbRating});
+            } else {
+                reject('foo');
+            }
+        });
+    });
 
-function getInfo(search, title, year, callback, errorCallback) {
-  // Google image search - 100 searches per day.
-  // https://developers.google.com/image-search/
-  var x = new XMLHttpRequest();
-  x.open('GET', search);
-  console.log(search);
-  // The Google image search API responds with JSON, so let Chrome parse it.
-  x.responseType = 'json';
-  x.onload = function() {
-    // Parse and process the response from Google Image Search.
-    var response = x.response;
-    if (!response) {
-        errorCallback(response);
-        return;
+    return myPromise;
+}
+
+function renderDisplay(imdbInfo) {
+    var parentDiv = document.getElementsByClassName('title');
+    parentDiv = parentDiv[parentDiv.length - 1];    
+    var node = document.createElement("A");
+    var textnode = document.createTextNode('IMDB link (' + imdbInfo.id + ')');
+    node.style["display"] = "block";
+    node.href = 'https://www.imdb.com/title/' + imdbInfo.id;
+    node.onclick = function() {
+        window.open(this.href); 
+        return false;
     }
-    // // Expect "N/A"
-    var imdbRating = response.imdbRating;
-    // // Expect tt4020236
-    var imdbID = response.imdbID;
-    // console.log(imdbRating);
-    // console.log(imdbID);
-    callback(imdbRating, imdbID);
-  };
-  x.onerror = function(message) {
-    errorCallback(message);
-  };
-  x.send();
+    node.appendChild(textnode);
+    var child = parentDiv.children[1];
+    parentDiv.insertBefore(node, child);
+    var rating = document.createElement("DIV");
+    var textRating = document.createTextNode(imdbInfo.rating);
+    rating.appendChild(textRating);
+    var child2 = parentDiv.children[1];
+    parentDiv.insertBefore(rating, child2);
+}
+
+
+function getInfo() {
+  var title = getObjTitle();
+  var year = getObjYear();
+  var x = ajaxCall(searchUrl(title, year));
+  x.then(function(data) {
+    renderDisplay(data);
+  });
+  x.catch(function() {
+    ajaxCall(searchUrl(title)).then(function(data) {
+        renderDisplay(data);
+    }, function() { 
+        alert('Failed');
+    });
+  })
 }
 
 
