@@ -1,3 +1,5 @@
+
+
 function getObjTitle() {
     var textTitle;
     var title = document.getElementsByClassName('title');
@@ -18,21 +20,25 @@ function getObjYear() {
 }
 
 function searchUrl(textTitle, textYear) {
-    var searchUrl = 'http://www.omdbapi.com/' + 
+    var searchUrl = 'https://www.omdbapi.com/' + 
     '?t=' + textTitle + '&y=' + textYear + '&plot=short&r=json';
     return searchUrl;
 }
 
 function renderHTML() {
     var html = '';
+    
+    
     html += getObjTitle();
     html += getObjYear();
     html += searchUrl(getObjTitle(), getObjYear());
-    thing = getInfo(getObjTitle(), getObjYear(), function(errorMessage) {
-      console.log('Cannot display');
+    getInfo(getObjTitle(), getObjYear(), function(imdbRating, imdbID) {
+        console.log(imdbRating);
+        console.log(imdbID);
+    }, function(errorMessage) {
+      console.log(errorMessage);
     });
-
-    console.log(thing);
+    
 
     return html;    
 }
@@ -61,31 +67,34 @@ function renderHTML() {
 //     return html;
 // }
 
-function getInfo(title, year, errorCallback) {
+
+function getInfo(title, year, callback, errorCallback) {
   // Google image search - 100 searches per day.
   // https://developers.google.com/image-search/
-  var searchUrl = 'http://www.omdbapi.com/' + 
+  var searchUrl = 'https://www.omdbapi.com/' + 
   '?t=' + title + '&y=' + year + '&plot=short&r=json';
   var x = new XMLHttpRequest();
   x.open('GET', searchUrl);
+  console.log(searchUrl);
   // The Google image search API responds with JSON, so let Chrome parse it.
   x.responseType = 'json';
   x.onload = function() {
     // Parse and process the response from Google Image Search.
     var response = x.response;
-    if (!response || !response.responseData || !response.responseData.results || response.responseData.results.length === 0) {
-        errorCallback('No response from Google Image search!');
+    if (!response) {
+        errorCallback(response);
         return;
     }
-    // Expect "N/A"
-    var imdbRating = response.imdbRating
-    // Expect tt4020236
+    // // Expect "N/A"
+    var imdbRating = response.imdbRating;
+    // // Expect tt4020236
     var imdbID = response.imdbID;
-    console.log(imdbRating);
-    console.log(imdbID);
+    // console.log(imdbRating);
+    // console.log(imdbID);
+    callback(imdbRating, imdbID);
   };
-  x.onerror = function() {
-    errorCallback('Network error.');
+  x.onerror = function(message) {
+    errorCallback(message);
   };
   x.send();
 }

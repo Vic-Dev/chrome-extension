@@ -10,6 +10,6 @@
   "permissions": [
   "tabs", 
   "<all_urls>",
-  "http://www.omdbapi.com/*"
+  "http://www.omdbapi.com/"
   ]
 }
