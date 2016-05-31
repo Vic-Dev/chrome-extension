@@ -34,13 +34,16 @@ function renderHTML() {
     html += title;
     html += year;
     html += search;
+
     getInfo(search, title, year, function(imdbRating, imdbID) {
+        console.log(html);
         console.log(imdbRating);
         console.log(imdbID);
+        var test = document.getElementsByClassName('year');
+        test = test[test.length - 1].innerHTML = imdbRating;
     }, function(errorMessage) {
       console.log(errorMessage);
     });
-    
 
     return html;    
 }
