@@ -9,7 +9,7 @@ function getObjTitle() {
     } else {
         textTitle = title.innerHTML;
     }
-    return textTitle.match(/([a-zA-Z](\s[a-zA-Z])?)*/)[0]; 
+    return textTitle.match(/([a-zA-Z](\s[a-zA-Z])?|-?)*/)[0]; 
 }
 
 function getObjYear() {
@@ -39,6 +39,19 @@ function renderHTML() {
 
     getInfo(search, title, year, function(imdbRating, imdbID) {
         console.log(imdbID);
+        var parentDiv = document.getElementsByClassName('title');
+        parentDiv = parentDiv[parentDiv.length - 1];    
+        var node = document.createElement("A");
+        var textnode = document.createTextNode('IMDB: ' + imdbID);
+        node.style["display"] = "block";
+        node.href = 'https://www.imdb.com/title/' + imdbID;
+        node.onclick = function() {
+            window.open(this.href); 
+            return false;
+        }
+        node.appendChild(textnode);
+        var child = parentDiv.children[1];
+        parentDiv.insertBefore(node, child);
         var test = document.getElementsByClassName('year');
         test = test[test.length - 1].innerHTML = imdbRating;
     }, function(errorMessage) {
