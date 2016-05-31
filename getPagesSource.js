@@ -27,12 +27,14 @@ function searchUrl(textTitle, textYear) {
 
 function renderHTML() {
     var html = '';
+    var title = getObjTitle();
+    var year = getObjYear();
+    var search = searchUrl(title, year);
     
-    
-    html += getObjTitle();
-    html += getObjYear();
-    html += searchUrl(getObjTitle(), getObjYear());
-    getInfo(getObjTitle(), getObjYear(), function(imdbRating, imdbID) {
+    html += title;
+    html += year;
+    html += search;
+    getInfo(search, title, year, function(imdbRating, imdbID) {
         console.log(imdbRating);
         console.log(imdbID);
     }, function(errorMessage) {
@@ -68,14 +70,12 @@ function renderHTML() {
 // }
 
 
-function getInfo(title, year, callback, errorCallback) {
+function getInfo(search, title, year, callback, errorCallback) {
   // Google image search - 100 searches per day.
   // https://developers.google.com/image-search/
-  var searchUrl = 'https://www.omdbapi.com/' + 
-  '?t=' + title + '&y=' + year + '&plot=short&r=json';
   var x = new XMLHttpRequest();
-  x.open('GET', searchUrl);
-  console.log(searchUrl);
+  x.open('GET', search);
+  console.log(search);
   // The Google image search API responds with JSON, so let Chrome parse it.
   x.responseType = 'json';
   x.onload = function() {
