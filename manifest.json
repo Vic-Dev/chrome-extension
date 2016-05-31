@@ -11,5 +11,11 @@
   "tabs", 
   "<all_urls>",
   "http://www.omdbapi.com/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": ["popup.js"]
+    }
   ]
 }
