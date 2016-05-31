@@ -9,7 +9,7 @@ function getObjTitle() {
     } else {
         textTitle = title.innerHTML;
     }
-    return textTitle; 
+    return textTitle.match(/([a-zA-Z](\s[a-zA-Z])?)*/)[0]; 
 }
 
 function getObjYear() {
@@ -31,13 +31,13 @@ function renderHTML() {
     var year = getObjYear();
     var search = searchUrl(title, year);
     
+    console.log(title);
+
     html += title;
     html += year;
     html += search;
 
     getInfo(search, title, year, function(imdbRating, imdbID) {
-        console.log(html);
-        console.log(imdbRating);
         console.log(imdbID);
         var test = document.getElementsByClassName('year');
         test = test[test.length - 1].innerHTML = imdbRating;
@@ -47,30 +47,6 @@ function renderHTML() {
 
     return html;    
 }
-
-
-// function getTitleAndYear() {
-//     var html = '';
-//     var elems = document.getElementsByTagName('*'), i;
-//     var title = document.getElementsByClassName('title');
-//     title = title[title.length - 1];
-//     var year = document.getElementsByClassName('year');
-//     year = year[year.length - 1];
-//     var textYear = year.innerHTML;
-//     if (title.getElementsByTagName('img').length > 0) {
-//         textTitle = title.getElementsByTagName('img')[0].getAttribute('alt');
-//         html += textTitle;
-//     } else {
-//         textTitle = title.innerHTML;
-//         html += textTitle;
-//     }
-//     html += textYear
-//     var searchUrl = 'http://www.omdbapi.com/' + 
-//     '?t=' + textTitle + '&y=' + textYear + '&plot=short&r=json';
-//     html += searchUrl;
-//     getInfo(textTitle, textYear);
-//     return html;
-// }
 
 
 function getInfo(search, title, year, callback, errorCallback) {
