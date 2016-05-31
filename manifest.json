@@ -1,0 +1,15 @@
+{
+  "name": "IMDB/Netflix",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Display IMDB ratings on hover over Netflix movies and TV shows",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+  "tabs", 
+  "<all_urls>",
+  "http://www.omdbapi.com/"
+  ]
+}
