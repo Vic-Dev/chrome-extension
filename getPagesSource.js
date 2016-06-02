@@ -20,7 +20,7 @@ function getObjYear() {
 function searchUrl(textTitle, textYear) {
     textYear = textYear || "";
     var searchUrl = 'https://www.omdbapi.com/' + 
-    '?t=' + textTitle + '&y=' + textYear + '&plot=short&r=json';
+    '?t=' + textTitle + '&year=' + textYear + '&plot=short&r=json';
     return searchUrl;
 }
 
