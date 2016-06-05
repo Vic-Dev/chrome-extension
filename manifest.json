@@ -17,5 +17,8 @@
       "matches": ["https://www.netflix.com/*"],
       "js": ["popup.js"]
     }
-  ]
+  ],
+  "background": {
+    "script": ["background.js"] 
+  }
 }
