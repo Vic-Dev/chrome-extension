@@ -94,11 +94,56 @@ function getInfo() {
   })
 }
 
+// renderHTML();
 
-chrome.runtime.sendMessage({
-    action: "getSource",
-    source: renderHTML()
+console.log("test");
+
+chrome.browserAction.onClicked(function() {
+    renderHTML();
 });
+
+// window.onload = renderHTML();
+
+// var currentPath;
+// var oldPath = document.location.href;
+
+// console.log(oldPath);
+
+// window.onload=function(){
+//  renderHTML();
+// }
+
+// setInterval(function() {
+//     console.log(oldPath);
+//     currentPath = document.location.href;
+//     console.log(currentPath);
+//     if (currentPath != oldPath) {
+//         renderHTML();
+//     }
+//     oldPath = document.location.href;
+// }, 2000);
+
+// chrome.runtime.onMessage.addListener(
+//   function(request, sender, sendResponse) {
+//     if( request.message === "clicked_browser_action" ) {
+//       console.log("tab changed");
+//     }
+//   }
+// );
+// chrome.runtime.onMessage.addListener(
+//   function(request, sender, sendResponse) {
+//     if( request.message === "clicked_browser_action" ) {
+//       var firstHref = $("a[href^='http']").eq(0).attr("href");
+
+//       console.log(firstHref);
+//     }
+//   }
+// );
+
+
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//    window.alert("test");
+// }); 
 
 /*
 TODO: Use these to target bob title and year
